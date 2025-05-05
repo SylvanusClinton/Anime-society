@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnimZe Society</title>
+    <style>
+        body{
+            font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            background: black;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        header{
+            padding: 20px;
+            background: blue;
+            text-align: center;
+        }
+
+        header input, header select{
+            padding: 10px;
+            margin: 10px;
+            font-size: 1rem;
+        }
+
+        .anime-grid{
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .anime-card{
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .anime-card img{
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+        }
+
+        .anime-card a{
+            display:block;
+            background: #ff5050;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            margin:10px;
+            border-radius: 5px;
+        }    
+    </style>
+</html>
+<body>
+    <header>
+        <h1>AnimZe Society</h1>
+        <input type="text" id="searchinput" placeholder="search anime...">
+        <select id="genreSelect">
+            <option values="">All Genres</option>
+            <option values="1">Action</option>
+            <option values="2">Adventure</option>
+            <option values="4">Comedy</option>
+            <option values="8">Drama</option>
+            <option values="10">Fantasy</option>
+            <option values="14">Horror</option>
+            <option values="22">Romance</option>
+            <option values="24">Sci-Fi</option>
+            <option values="30">Sports</option>
+    </select>
+    </header>
+    <main>
+        <div class="anime-grid" id="anime-grid"></div>
+    </main>
+
+    <script>
+        a sync function fetchanime(query="Naruto",genre=""){
+            const res= await fetch(`https://animepahe.anime?q=${query}&genre=${genre}&order_by=score&sort=desc&limit=12);
+            const data= await res.json();
+            const animeGrid= document.getElementByld("animeGrid");
+            animeGrid.innerHTML="";
+
+            data.data.forEach(anime=>{
+            animeGrid.innerHTML+=`
+        <div class="anime-card">
+         <img src="${anime.images.jpg.image_url}"alt${anime.title}/>
+         <h3>${anime.title}</h3>
+         <p>${anime.synopsis ? anime.synopsis.substring(0,100)+'...''No description available.'}</p>
+         <p><stong>Episodes:</strong>${anime.episodes||'N/A'}</p>
+         <a href="${anime.url}"target="blank">view on my AnimeList<a/>
+         ${anime.trailer?.youtube_id ?`<a href="https:ww.youtube.com/watch?v=${anime.trailer.youtube_id}"target="_blank">watch trailer<a/>`"}
+         </div>
+         `;
+    });
+ }
+    document.getElementByld("genreSelect").addEventListener("change",()=>{
+    const query= document.getElementByld("searchinput").value||"Naruto";
+    const genre= document.getElementByld("genreSelect").value;
+    fetchAnime(query,genre);
+    });
+    fetchAnime();
+    </script>
+</body>
